@@ -3,9 +3,12 @@
 
 #include <vector>
 
-const int INTERACOES_MAX = 100;
+const int ITERACOES_MAX = 10000;
 
-const bool VENTO_ATIVO = false; //vento ativo true, fogo propaga apenas nas direções escolhidas
+const int MIN_LINHAS = 100;
+const int MIN_COLUNAS = 100;
+
+const bool VENTO_ATIVO = false; // true: com vento , false: sem vento
 
 enum Direcao 
 {
@@ -15,6 +18,6 @@ enum Direcao
     DIREITA
 };
 
-const std::vector<Direcao> direcoesVento = { CIMA, DIREITA };
+const std::vector<Direcao> direcoesVento = { BAIXO , DIREITA }; // Caso o vento esteja ativo, é preciso configurar as direções específicas para a propagação.
 
 #endif

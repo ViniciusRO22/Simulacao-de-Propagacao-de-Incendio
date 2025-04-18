@@ -1,15 +1,62 @@
 #include "Animal.hpp"
 
-Animal::Animal(int posX, int posY) : posX(posX), posY(posY), passos(0), aguaEncontrada(0), interacoesSeguras(0) { }
+Animal::Animal(int posX, int posY) : posX(posX), posY(posY), passos(0), aguaEncontrada(0), iteracoesSeguras(0), iteracoesSegurasTotais(0), ultimaPosX(-1), ultimaPosY(-1), vivo(true)
+{ }
 
-void Animal::mover(const std::vector<std::vector<int>> &matriz) 
+bool Animal::estaVivo() const
 {
+    return vivo;
+}
+
+
+void Animal::mover(std::vector<std::vector<int>> &matriz) 
+{
+    if (!vivo) return;
+
     int nLinhas = matriz.size();
     int nColunas = matriz[0].size();
     
     std::vector<std::pair<int, int>> direcoes = { {-1,0}, {1,0}, {0,-1}, {0,1} };
 
-    int melhorValor = -1;
+    // ------------- Segunda Chance -------------
+    if (matriz[posX][posY] == 2) 
+    {
+        bool cercado = true;
+    
+        for (const auto &d : direcoes)
+        {
+            int ni = posX + d.first;
+            int nj = posY + d.second;
+            
+            if (ni >= 0 && ni < nLinhas && nj >= 0 && nj < nColunas)
+            {
+                if (matriz[ni][nj] != 2)
+                {
+                    cercado = false;
+                    
+                    break;
+                }
+            }
+        }
+        
+        if (cercado)
+        {
+            vivo = false;
+           
+            return;
+        }
+  
+    }
+
+    if (matriz[posX][posY] == 0 && iteracoesSeguras < 3) 
+    {
+        atualizarSeguranca();
+        
+        return;
+    }
+
+    // Prioridade: 3 para água (4), 2 para área vazia (0) ou árvore saudável (1), 1 para árvore queimada (3)
+    int melhorPrioridade = 0;
     int novaX = posX, novaY = posY;
 
     for (auto d : direcoes) 
@@ -19,36 +66,104 @@ void Animal::mover(const std::vector<std::vector<int>> &matriz)
         
         if (ni >= 0 && ni < nLinhas && nj >= 0 && nj < nColunas) 
         {
-            int valorCelula = matriz[ni][nj];
-            // Prioridade: 4 > 0 e 1 > 3; ignora fogo (2) e queimada (3) se não houver outra opção
-            if (valorCelula == 4) 
+            if (ni == ultimaPosX && nj == ultimaPosY && matriz[posX][posY] != 2) 
             {
-                novaX = ni; novaY = nj;
-                melhorValor = 4;
+                continue;
+            }
+            
+            int valorCelula = matriz[ni][nj];
+            int prioridadeCelula = 0;
+            
+            if (valorCelula == 4)
+            {
+                prioridadeCelula = 3;
+            }
+            else if (valorCelula == 0 || valorCelula == 1)
+            {
+                prioridadeCelula = 2;
+            }
+            else if (valorCelula == 3)
+            {
+                prioridadeCelula = 1;
+            }
+            
+            if (prioridadeCelula == 3) 
+            {
+                novaX = ni;
+                novaY = nj;
+                melhorPrioridade = 3;
                 
                 break;
             } 
-            else if ((valorCelula == 0 || valorCelula == 1) && melhorValor < 0) 
+      
+            else if (prioridadeCelula > melhorPrioridade) 
             {
-                novaX = ni; novaY = nj;
-                melhorValor = valorCelula;
+                novaX = ni;
+                novaY = nj;
+                melhorPrioridade = prioridadeCelula;
             }
         }
     }
 
-    if (melhorValor != -1 && (novaX != posX || novaY != posY)) 
+    // Se não encontrou nenhuma opção melhor, tenta voltar para a última posição
+    if (melhorPrioridade == 0 && ultimaPosX != -1 && ultimaPosY != -1) 
     {
+        int valorUltima = matriz[ultimaPosX][ultimaPosY];
+
+        if (valorUltima != 2) 
+        {
+            novaX = ultimaPosX;
+            novaY = ultimaPosY;
+            melhorPrioridade = 1; 
+        }
+    }
+
+
+    if ((novaX != posX || novaY != posY) && melhorPrioridade > 0)
+    {
+        ultimaPosX = posX;
+        ultimaPosY = posY;
+        
         posX = novaX;
         posY = novaY;
-        registrarPasso();
+
+        rodadasSemMover = 0; 
+
+        iteracoesSeguras = 0; 
         
-        if (melhorValor == 4) 
+        registrarPasso();
+
+        if (melhorPrioridade == 3) 
         {
             encontrouAgua();
+
+            matriz[posX][posY] = 0;
+
+            for (auto d : direcoes) 
+            {
+                int adjX = posX + d.first;
+                int adjY = posY + d.second;
+                if (adjX >= 0 && adjX < nLinhas && adjY >= 0 && adjY < nColunas)
+                {
+                    matriz[adjX][adjY] = 1;
+                }
+            }
         }
-    } 
+    }
     else 
     {
+        if (!(matriz[posX][posY] == 0 && iteracoesSeguras < 3))
+        {
+            rodadasSemMover++; 
+
+            if (rodadasSemMover >= limiteRodadasSemMover)
+            {
+                vivo = false;
+               
+                return;
+            }
+        }
+        
         if (matriz[posX][posY] == 0)
         {
             atualizarSeguranca();
@@ -88,10 +203,11 @@ int Animal::getAguaEncontrada() const
 
 void Animal::atualizarSeguranca() 
 { 
-    interacoesSeguras++; 
+    iteracoesSeguras++; 
+    iteracoesSegurasTotais++;
 }
 
-int Animal::getInteracoesSeguras() const 
+int Animal::getIteracoesSegurasTotais() const 
 { 
-    return interacoesSeguras; 
+    return iteracoesSegurasTotais; 
 }

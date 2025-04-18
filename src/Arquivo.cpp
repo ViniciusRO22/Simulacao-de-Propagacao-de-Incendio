@@ -26,7 +26,7 @@ bool Arquivo::carregarMapa(const std::string &nomeArquivo, Floresta &floresta)
     if (!entrada.is_open()) 
     {
         std::cerr << "Erro ao abrir o arquivo " << nomeArquivo << "\n";
-       
+        
         return false;
     }
     
@@ -42,6 +42,9 @@ bool Arquivo::carregarMapa(const std::string &nomeArquivo, Floresta &floresta)
             floresta.definirValor(i, j, valor);
         }
     }
+   
+    floresta.definirValor(fogoLinha, fogoColuna, 2);
+    
     entrada.close();
     
     return true;
@@ -54,9 +57,9 @@ void Arquivo::salvarMapa(const std::string &nomeArquivo, const Floresta &florest
     if (!saida.is_open()) 
     {
         std::cerr << "Erro ao abrir o arquivo " << nomeArquivo << "\n";
-        
         return;
     }
+    
     saida << "Iteração " << iteracao << ":\n";
     
     for (int i = 0; i < floresta.linhas(); i++) 
@@ -67,12 +70,15 @@ void Arquivo::salvarMapa(const std::string &nomeArquivo, const Floresta &florest
         }
         saida << "\n";
     }
+    
     saida << "\n";
     saida.close();
 }
 
-void Arquivo::salvarResultados(const std::string &nomeArquivo, const Floresta &floresta, int iteracoes, int passos, int aguaEncontrada, int interacoesSeguras) 
+void Arquivo::salvarResultados(const std::string &nomeArquivo, const Floresta &floresta, int iteracoes, int passos, int aguaEncontrada, int iteracoesSegurasTotais, const std::string &caminho, bool sobreviveu) 
 {
+    (void)floresta; 
+
     std::ofstream saida(nomeArquivo, std::ios::app);
     
     if (!saida.is_open()) 
@@ -83,8 +89,10 @@ void Arquivo::salvarResultados(const std::string &nomeArquivo, const Floresta &f
     }
     
     saida << "Simulação finalizada após " << iteracoes << " iterações.\n";
+    saida << "Caminho percorrido pelo animal: " << caminho << "\n";
     saida << "Passos do animal: " << passos << "\n";
     saida << "Água encontrada: " << aguaEncontrada << "\n";
-    saida << "Interações seguras: " << interacoesSeguras << "\n";
+    saida << "Interações seguras: " << iteracoesSegurasTotais << "\n";
+    saida << "O animal " << (sobreviveu ? "sobreviveu." : "não sobreviveu.") << "\n\n";
     saida.close();
 }

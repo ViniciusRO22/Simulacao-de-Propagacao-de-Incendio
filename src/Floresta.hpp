@@ -7,7 +7,6 @@
 class Floresta 
 {
     public:
-   
         Floresta(int n, int m);
         
         void exibir() const;
@@ -15,21 +14,19 @@ class Floresta
         void atualizarFogo();
 
         int obterValor(int linha, int coluna) const;
-
         void definirValor(int linha, int coluna, int valor);
-
         int linhas() const;
-
         int colunas() const;
-
+        bool todaQueimada() const;
+        
         const std::vector<std::vector<int>>& getMatriz() const;
-
         std::vector<std::vector<int>>& getMatriz();
 
     private:
         int nLinhas;
         int nColunas;
-        std::vector<std::vector<int>> matriz;
+        std::vector<std::vector<int>> matriz;      
+        std::vector<std::vector<int>> fireGen;
 
         bool posicaoValida(int linha, int coluna) const;
 };

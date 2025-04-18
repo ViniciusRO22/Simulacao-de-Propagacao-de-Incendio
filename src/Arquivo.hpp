@@ -1,18 +1,19 @@
-#ifndef MANIPULADOR_ARQUIVOS_HPP
-#define MANIPULADOR_ARQUIVOS_HPP
+#ifndef ARQUIVO_HPP
+#define ARQUIVO_HPP
 
 #include <string>
 #include "Floresta.hpp"
 
-class ManipuladorArquivos {
-public:
-    static std::pair<int, int> obterDimensao(const std::string &nomeArquivo); //obter dimensões da matriz
+class Arquivo
+{
+    public:
+        static std::pair<int, int> obterDimensao(const std::string &nomeArquivo);
 
-    static bool carregarMapa(const std::string &nomeArquivo, Floresta &floresta); //carrega o mapa
+        static bool carregarMapa(const std::string &nomeArquivo, Floresta &floresta);
 
-    static void salvarMapa(const std::string &nomeArquivo, const Floresta &floresta, int iteracao); //salva o estado atual da floresta
+        static void salvarMapa(const std::string &nomeArquivo, const Floresta &floresta, int iteracao);
 
-    static void salvarResultados(const std::string &nomeArquivo, const Floresta &floresta, int iteracoes, int passos, int aguaEncontrada, int interacoesSeguras); //salva final
+        static void salvarResultados(const std::string &nomeArquivo, const Floresta &floresta, int iteracoes, int passos, int aguaEncontrada, int iteracoesSegurasTotais, const std::string &caminho, bool sobreviveu);
 };
 
 #endif
