@@ -1,6 +1,61 @@
 # Simulação de Propagação de Incêndio Florestal com Comportamento Animal
+## Sumário
 
-Este projeto simula a propagação de um incêndio em uma floresta, considerando a influência do vento e o comportamento de um animal tentando sobrevier. Abaixo está a documentação detalhada das classes, entradas/saídas e análises complementares.
+1. [Introdução](#introdução)
+   - Propagação do Fogo
+   - Comportamento do Animal
+2. [Estrutura das Classes](#estrutura-das-classes)
+   - Classe `config.hpp`  
+   - Classe `Arquivo.hpp` / `Arquivo.cpp`  
+   - Classe `Animal.hpp` / `Animal.cpp`  
+   - Classe `Floresta.hpp` / `Floresta.cpp`  
+   - Classe `Simulacao.hpp` / `Simulacao.cpp`  
+3. [Análises dos Padrões de Propagação do Fogo](#análises-dos-padrões-de-propagação-do-fogo)  
+   - Propagação sem Vento  
+   - Propagação com Vento  
+   - Tabela Comparativa  
+4. [Capacidade Preditiva da Simulação](#capacidade-preditiva-da-simulação)  
+   - Modelagem Temporal  
+   - Fatores de Influência  
+   - Equações Específicas  
+5. [Algoritmos Emergentes para Melhoria de Desempenho](#algoritmos-emergentes-para-melhoria-de-desempenho)  
+   - Busca em Largura (BFS)  
+   - Autômato Celular Probabilístico  
+   - A* Adaptativo  
+   - Comparação de Desempenho  
+7. [Conclusão](#conclusão)  
+8. [Compilação e Execução](#compilação-e-execução)  
+
+---
+
+## Introdução 
+Este projeto é uma implementação de um simulador de propagação de incêndios em ambientes florestais, utilizando programação em C++. A simulação ocorre em uma matriz N×M, onde cada célula representa um estado específico da floresta: áreas vazias, árvores saudáveis, árvores em chamas, árvores queimadas e água. O objetivo principal é analisar a dinâmica do fogo sob diferentes condições, como a influência do vento, e incorporar a inteligência de um animal que busca sobreviver. As principais caracteristicas são:
+
+### 1. Propagação do Fogo  
+- **Transição de estados**:  
+  - Árvore saudável (`1`) → Em chamas (`2`) → Queimada (`3`).  
+  - Células em chamas (`2`) tornam-se queimadas (`3`) após **2 iterações**.
+    
+- **Modos de propagação**:  
+  - **Sem vento**: Expansão nas **4 direções ortogonais** (cima, baixo, esquerda, direita).  
+  - **Com vento**: Direções configuráveis (ex: `CIMA` e `DIREITA`) para simular uma propagação mais específica.    
+
+- **Controle de execução**:  
+  - Limite máximo de iterações de propagação de fogo de acordo com `config.hpp`
+  - Fim da simulação caso o fogo seja extinto ou o animal morra
+
+### 2. Comportamento do Animal  
+- **Prioridades de movimento**:  
+  - **Água (`4`)**: Movimento imediato 
+  - **Área vazia (`0`) ou árvore saudável (`1`)**: Segunda opção.  
+  - **Árvore queimada (`3`)**: Última opção.  
+
+- **Mecanismo de sobrevivência**:  
+  - **Segunda chance**: Se atingido pelo fogo, tenta se mover imediatamante antes da próxima propagação. Porém caso esteja cercado por fogo o animal morre  
+
+- **Efeito da água**: Caso uma celúla com água seja alcançada pelo animal 
+  - Célula com água (`4`) → Se tornam área segura (`0`).  
+  - Células adjacentes → Regeneradas para árvores saudáveis (`1`).  
 
 ---
 
@@ -45,7 +100,7 @@ Exemplo de entrada em uma matriz 5x5, lembrando que o recomendado é considerar 
   - `1`: Árvore saudável.
   - `2`: Árvore em chamas.
   - `3`: Árvore queimada.
-  - `4`: Água (extingue fogo adjacente e se torna 0 caso o animal pise nela).
+  - `4`: Água.
 
 #### Formato do `output.dat`:
 - **Iterações**: Snapshots da matriz a cada iteração(exemplo de acordo com a matriz exemplo do input.dat e sem vento)
@@ -762,7 +817,7 @@ Iteração 7:
 | Padrão Geométrico    | Circular             | Linear                 | Elíptico/Setorial        |
 | Previsibilidade      | Alta                 | Muito Alta             | Moderada                 |
 
-Taxa teórica em matriz livre, na prática é reduzida por obstáculos
+Taxa teórica em matriz livre, na prática pode reduzida por obstáculos, como as dimensões da matriz.
 
 ---
 
@@ -781,46 +836,66 @@ Taxa teórica em matriz livre, na prática é reduzida por obstáculos
 
 
 ### Equações Específicas
+A previsão do alcance do fogo ao longo do tempo pode ser modelada de forma simplificada por:
 
 ```python
 # Crescimento Linear (1 direção)
-def previsao_linear(t):
-    return t + 1
+def previsao_linear(t,r):
+    total_regenerado = sum(R(i) for i in range(1, t+1))
+    return (t + 1) - total_regenerado
 
 # Crescimento Exponencial (2+ direções)
-def previsao_exponencial(t, k):
-    return k ** t
+def previsao_exponencial(t, k, r):
+    total_regenerado = sum(R(i) for i in range(1, t+1))
+    return (k ** t) - total_regenerado
 ```
+R(i) pode ser modelado como E(i) * r, onde E(i) é o número de encontros com água na iteração i e r é a média de células regeneradas por encontro (até 4 adjacentes).
+
+Taxa teórica em matriz livre, na prática pode reduzida por obstáculos, como as dimensões da matriz.
+
+
+
 ---
 
 ## Algoritmos Emergentes para Melhoria de Desempenho
 
 ### 1. Busca em Largura (BFS)
 #### Aplicação:
-- **Otimização de rotas do animal** para evitar fogo e encontrar água.  
+- Otimização de rotas do animal para evitar fogo e encontrar água.  
 - **Vantagem**: Encontra caminhos seguros mais curtos em `O(N+M)`.  
 
 ### 2. Autômato Celular Probabilístico
 #### Aplicação:
-- **Modelagem realista de ignição**: 70% de chance de propagação com vento favorável, 30% contra por exemplo.  
+- **Modelagem realista de ignição**: 70% de chance de propagação com vento favorável, 30% contra, por exemplo.  
 - **Vantagem**: Simula imprevisibilidade climática sem sobrecarga computacional.  
 
 ### 3. A* (A-Estrela) Adaptativo
 #### Aplicação:
-- **Fuga estratégica do animal**: Considera risco futuro de propagação.  
-- **Vantagem**: Reduz taxa de mortalidade em 45% (testes em matrizes 100x100).  
+- **Fuga estratégica do animal**: Considera risco futuro de propagação priorizando caminhos promissores e evitando explorar caminhos desnecessários.  
+- **Vantagem**: Reduziria a taxa de mortalidade do animal nas simulações.  
   
 #### Comparação de Desempenho:
 | Algoritmo         | Complexidade | Aplicabilidade          | Impacto na Simulação      |
 |-------------------|--------------|-------------------------|---------------------------|
 | BFS               | O(N+M)       | Movimento do animal     | + eficiência em rotas de movimentação   |
 | Autômato Celular  | O(N²)        | Propagação do fogo      | + realismo                |
-| A*                | O(N log N)   | Fuga estratégica        | + sobrevivência do animal      |
+| A*                | O(N log N)   | Fuga estratégica        | + sobrevivência do animal       |
 
 ---
 
 ## Conclusão
-Esta simulação oferece uma plataforma versátil para estudar a dinâmica de incêndios com controle preciso de direcionalidade do vento. Diferentemente de modelos tradicionais, **não assume aceleração pelo vento**, focando em padrões geométricos de propagação, oque facilita estudos academicos mais simples sobre propagação de incêndios e sobre algoritmos de busca e probabilísticos
+Este projeto entrega uma maneira de se estudar a propagação de incêndios florestais sob diferentes condições —  ambiente sem vento ou com vento em direções específicas . Ao modelar cada árvore, foco de fogo e célula de água em uma matriz 2D, a simulação revela padrões geométricos claros que facilitam a compreensão de processos complexos de difusão e queima.
+
+Além de seu valor acadêmico no estudo de dinâmica de incêndios, serve como uma excelente fonte de estudos para testar e comparar algoritmos de busca (BFS, A*, etc.) e modelos probabilísticos de autômatos celulares. Com isso, sendo possível:
+- **Avaliar heurísticas de rota** para agentes móveis em ambientes perigosos.  
+- **Analisar impactos do vento** e da distribuição de recursos hídricos na contenção do fogo.  
+- **Experimentar variações paramétricas** (tamanho da matriz, número de iterações, direções do vento) em questão de segundos.
+
+Graças à arquitetura modular — dividida em classes de configuração, leitura/gravação de arquivos, lógica de animal e dinâmica da floresta — você pode estender facilmente o código para caso queira:
+- Incluir múltiplos animais com comportamentos cooperativos.  
+- Adotar modelos climáticos mais realistas (mudança de direção e intensidade do vento ao longo do tempo).  
+- Integrar interfaces gráficas ou visualizações em tempo real mais elaboradas.
+
 
 ---
 
@@ -832,6 +907,14 @@ Essa simulação de propagação de incêndios possui um arquivo Makefile que re
 | `make clean`  | Apaga a última compilação realizada contida na pasta `build`           |
 | `make`        | Executa a compilação do programa utilizando o `gcc`, gerando em `build`|
 | `make run`    | Executa o programa compilado na pasta `build`                          |
+
+---
+## Referências
+- https://pt.stackoverflow.com/questions/146976/por-que-o-custo-de-complexidade-de-uma-bfs-é-onm
+- https://www.ime.usp.br/~pf/algoritmos_para_grafos/aulas/bfs.html
+- https://www.esalq.usp.br/lepse/imgs/conteudo_thumb/Aut-matos-Celulares.pdf
+- https://pt.stackoverflow.com/questions/328048/como-é-o-funcionamento-básico-do-algoritmo-a
+- https://www.datacamp.com/pt/tutorial/a-star-algorithm
 
 
 
