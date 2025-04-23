@@ -836,7 +836,7 @@ Taxa teórica em matriz livre, na prática pode reduzida por obstáculos, como a
 
 
 ### Equações Específicas
-A previsão do alcance do fogo ao longo do tempo pode ser modelada de forma simplificada por:
+A previsão da área queimada ao longo do tempo pode ser modelada de forma simplificada por:
 
 ```python
 # Crescimento Linear (1 direção)
