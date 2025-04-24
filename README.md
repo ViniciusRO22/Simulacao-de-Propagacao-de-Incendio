@@ -1,4 +1,4 @@
-# Simulação de Propagação de Incêndio Florestal com Comportamento Animal
+# Simulação de Propagação de Incêndio
 ## Sumário
 
 1. [Introdução](#introdução)
