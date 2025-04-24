@@ -813,7 +813,7 @@ Iteração 7:
 |----------------------|----------------------|------------------------|--------------------------|
 | Direções de Expansão | 4 (todas)            | 1 direção fixa         | 2+ direções configuráveis |
 | Tipo de Crescimento  | Exponencial (4^t)    | Linear (t+1)           | Exponencial (2^t a 3^t)  |
-| Velocidade           | 4 células/iteração*  | 1 célula/iteração      | 2-3 células/iteração      |
+| Velocidade           | 4 células/iteração   | 1 célula/iteração      | 2-3 células/iteração      |
 | Padrão Geométrico    | Circular             | Linear                 | Elíptico/Setorial        |
 | Previsibilidade      | Alta                 | Muito Alta             | Moderada                 |
 
@@ -857,7 +857,7 @@ Taxa teórica em matriz livre, na prática pode reduzida por obstáculos, como a
 
 ---
 
-## Algoritmos Emergentes para Melhoria de Desempenho
+## Algoritmos que poderiam ser utilizados para Melhoria de Desempenho
 
 ### 1. Busca em Largura (BFS)
 #### Aplicação:
