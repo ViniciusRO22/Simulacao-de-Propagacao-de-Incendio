@@ -919,7 +919,7 @@ Essa simulação de propagação de incêndios possui um arquivo Makefile que re
 - https://www.datacamp.com/pt/tutorial/a-star-algorithm
 
 ---
-## Autores e Contato
+## Autores e Contatos
 Autor: Vinícius Ramalho de Oliveira
 - E-mail: ramalhooliveiravini@gmail.com
 - Instagram: @_ vinicius.ro_
