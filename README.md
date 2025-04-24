@@ -34,10 +34,10 @@ Este projeto é uma implementação de um simulador de propagação de incêndio
 ### 1. Propagação do Fogo  
 - **Transição de estados**:  
   - Árvore saudável (`1`) → Em chamas (`2`) → Queimada (`3`).  
-  - Células em chamas (`2`) tornam-se queimadas (`3`) após **2 iterações**.
+  - Células em chamas (`2`) tornam-se queimadas (`3`) após 2 iterações.
     
 - **Modos de propagação**:  
-  - **Sem vento**: Expansão nas **4 direções ortogonais** (cima, baixo, esquerda, direita).  
+  - **Sem vento**: Expansão nas 4 direções ortogonais(cima, baixo, esquerda, direita).  
   - **Com vento**: Direções configuráveis (ex: `CIMA` e `DIREITA`) para simular uma propagação mais específica.    
 
 - **Controle de execução**:  
