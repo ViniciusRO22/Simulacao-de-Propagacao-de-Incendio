@@ -18,7 +18,7 @@
    - Modelagem Temporal  
    - Fatores de Influência  
    - Equações Específicas  
-5. [Algoritmos Emergentes para Melhoria de Desempenho](#algoritmos-emergentes-para-melhoria-de-desempenho)  
+5. [Algoritmos que poderiam ser utilizados para Melhoria de Desempenho](#algoritmos-que-poderiam-ser-utilizados-para-melhoria-de-desempenho)  
    - Busca em Largura (BFS)  
    - Autômato Celular Probabilístico  
    - A* Adaptativo  
