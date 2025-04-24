@@ -916,7 +916,9 @@ Essa simulação de propagação de incêndios possui um arquivo Makefile que re
 - https://pt.stackoverflow.com/questions/328048/como-é-o-funcionamento-básico-do-algoritmo-a
 - https://www.datacamp.com/pt/tutorial/a-star-algorithm
 
-
+---
+## Contato
+- E-mail: ramalhooliveiravini@gmail.com
 
 
 
