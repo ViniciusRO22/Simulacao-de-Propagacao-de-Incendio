@@ -24,7 +24,9 @@
    - A* Adaptativo  
    - Comparação de Desempenho  
 7. [Conclusão](#conclusão)  
-8. [Compilação e Execução](#compilação-e-execução)  
+8. [Compilação e Execução](#compilação-e-execução)
+9. [Referências](#referencias)
+10. [Autores e Contatos](#autores-e-contatos)
 
 ---
 
@@ -917,8 +919,10 @@ Essa simulação de propagação de incêndios possui um arquivo Makefile que re
 - https://www.datacamp.com/pt/tutorial/a-star-algorithm
 
 ---
-## Contato
+## Autores e Contato
+Autor: Vinícius Ramalho de Oliveira
 - E-mail: ramalhooliveiravini@gmail.com
+- Instagram: @_ vinicius.ro_
 
 
 
