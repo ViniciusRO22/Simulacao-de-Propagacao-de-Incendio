@@ -877,11 +877,11 @@ Taxa teórica em matriz livre, na prática pode reduzida por obstáculos, como a
 - **Vantagem**: Reduziria a taxa de mortalidade do animal nas simulações.  
   
 #### Comparação de Desempenho:
-| Algoritmo         | Complexidade | Aplicabilidade          | Impacto na Simulação      |
-|-------------------|--------------|-------------------------|---------------------------|
-| BFS               | O(N+M)       | Movimento do animal     | + eficiência em rotas de movimentação   |
-| Autômato Celular  | O(N²)        | Propagação do fogo      | + realismo                |
-| A*                | O(N log N)   | Fuga estratégica        | + sobrevivência do animal       |
+| Algoritmo         | Complexidade | Aplicabilidade          | Impacto na Simulação                    | Referências |
+|-------------------|--------------|-------------------------|---------------------------------------- |-------------|
+| BFS               | O(N+M)       | Movimento do animal     | + eficiência em rotas de movimentação   | 1 e 2       |
+| Autômato Celular  | O(N²)        | Propagação do fogo      | + realismo                              | 3           |
+| A*                | O(N log N)   | Fuga estratégica        | + sobrevivência do animal               | 4 e 5       |
 
 ---
 
@@ -912,11 +912,11 @@ Essa simulação de propagação de incêndios possui um arquivo Makefile que re
 
 ---
 ## Referências
-- https://pt.stackoverflow.com/questions/146976/por-que-o-custo-de-complexidade-de-uma-bfs-é-onm
-- https://www.ime.usp.br/~pf/algoritmos_para_grafos/aulas/bfs.html
-- https://www.esalq.usp.br/lepse/imgs/conteudo_thumb/Aut-matos-Celulares.pdf
-- https://pt.stackoverflow.com/questions/328048/como-é-o-funcionamento-básico-do-algoritmo-a
-- https://www.datacamp.com/pt/tutorial/a-star-algorithm
+1. https://pt.stackoverflow.com/questions/146976/por-que-o-custo-de-complexidade-de-uma-bfs-é-onm
+2. https://www.ime.usp.br/~pf/algoritmos_para_grafos/aulas/bfs.html
+3. https://www.esalq.usp.br/lepse/imgs/conteudo_thumb/Aut-matos-Celulares.pdf
+4. https://pt.stackoverflow.com/questions/328048/como-é-o-funcionamento-básico-do-algoritmo-a
+5. https://www.datacamp.com/pt/tutorial/a-star-algorithm
 
 ---
 ## Autores e Contatos
