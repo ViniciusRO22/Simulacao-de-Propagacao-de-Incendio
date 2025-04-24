@@ -25,7 +25,7 @@
    - Comparação de Desempenho  
 7. [Conclusão](#conclusão)  
 8. [Compilação e Execução](#compilação-e-execução)
-9. [Referências](#referencias)
+9. [Referências](#referências)
 10. [Autores e Contatos](#autores-e-contatos)
 
 ---
