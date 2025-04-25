@@ -181,7 +181,6 @@ Iteração 7:
 ---
 
 ### 3. Classe `Animal.hpp`/`Animal.cpp`
-[Animal.cpp](#animalcpp)
 #### Visão Geral:
 A classe `Animal` modela um agente autônomo que tenta sobreviver ao incêndio na floresta. Suas principais responsabilidades incluem:  
 - **Movimentação inteligente** com base no estado da matriz.  
@@ -211,6 +210,8 @@ A classe `Animal` modela um agente autônomo que tenta sobreviver ao incêndio n
 
 #### Método Mover:
 ##### Verificação de Segunda Chance:
+
+[Animal.cpp](https://github.com/vinicius/simulacao-incendio/blob/main/src/Animal.hpp#L28-L41)
 
 | Componente          | Funcionalidade                                                | Resposta Esperada                                                       |
 |---------------------|---------------------------------------------------------------|--------------------------------------------------------------------------|
