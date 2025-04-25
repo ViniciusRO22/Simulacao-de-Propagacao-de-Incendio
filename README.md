@@ -839,14 +839,9 @@ Taxa teórica em matriz livre, na prática pode reduzida por obstáculos, como a
 ### 1. Busca em Largura (BFS)
 #### Aplicação:
 - Otimização de rotas do animal para evitar fogo e encontrar água.  
-- **Vantagem**: Encontra caminhos seguros mais curtos em `O(N+M)`.  
+- **Vantagem**: Encontra caminhos seguros mais curtos em `O(N+M)`.   
 
-### 2. Autômato Celular Probabilístico
-#### Aplicação:
-- **Modelagem realista de ignição**: 70% de chance de propagação com vento favorável, 30% contra, por exemplo.  
-- **Vantagem**: Simula imprevisibilidade climática sem sobrecarga computacional.  
-
-### 3. A* (A-Estrela) Adaptativo
+### 2. A* (A-Estrela) Adaptativo
 #### Aplicação:
 - **Fuga estratégica do animal**: Considera risco futuro de propagação priorizando caminhos promissores e evitando explorar caminhos desnecessários.  
 - **Vantagem**: Reduziria a taxa de mortalidade do animal nas simulações.  
@@ -855,18 +850,17 @@ Taxa teórica em matriz livre, na prática pode reduzida por obstáculos, como a
 | Algoritmo         | Complexidade | Aplicabilidade          | Impacto na Simulação                    | Referências |
 |-------------------|--------------|-------------------------|---------------------------------------- |-------------|
 | BFS               | O(N+M)       | Movimento do animal     | + eficiência em rotas de movimentação   | 1 e 2       |
-| Autômato Celular  | O(N²)        | Propagação do fogo      | + realismo                              | 3           |
-| A*                | O(N log N)   | Fuga estratégica        | + sobrevivência do animal               | 4 e 5       |
+| A*                | O(N log N)   | Fuga estratégica        | + sobrevivência do animal               | 3 e 4       |
 
 ---
 
 ## Conclusão
 Este projeto entrega uma maneira de se estudar a propagação de incêndios florestais sob diferentes condições —  ambiente sem vento ou com vento em direções específicas . Ao modelar cada árvore, foco de fogo e célula de água em uma matriz 2D, a simulação revela padrões geométricos claros que facilitam a compreensão de processos complexos de difusão e queima.
 
-Além de seu valor acadêmico no estudo de dinâmica de incêndios, serve como uma excelente fonte de estudos para testar e comparar algoritmos de busca (BFS, A*, etc.) e modelos probabilísticos de autômatos celulares. Com isso, sendo possível:
-- **Avaliar heurísticas de rota** para agentes móveis em ambientes perigosos.  
-- **Analisar impactos do vento** e da distribuição de recursos hídricos na contenção do fogo.  
-- **Experimentar variações paramétricas** (tamanho da matriz, número de iterações, direções do vento) em questão de segundos.
+Além de seu valor acadêmico no estudo de dinâmica de incêndios, serve como uma excelente fonte de estudos para testar e comparar algoritmos de busca (BFS, A*, etc.). Com isso, sendo possível:
+- Avaliar heurísticas de rota para animais em ambientes perigosos.  
+- Analisar impactos do vento e da distribuição de recursos hídricos na contenção do fogo.  
+- Experimentar variações paramétricas (tamanho da matriz, número de iterações, direções do vento) em questão de segundos.
 
 Graças à arquitetura modular — dividida em classes de configuração, leitura/gravação de arquivos, lógica de animal e dinâmica da floresta — você pode estender facilmente o código para caso queira:
 - Incluir múltiplos animais com comportamentos cooperativos.  
@@ -889,9 +883,8 @@ Essa simulação de propagação de incêndios possui um arquivo Makefile que re
 ## Referências
 1. https://pt.stackoverflow.com/questions/146976/por-que-o-custo-de-complexidade-de-uma-bfs-é-onm
 2. https://www.ime.usp.br/~pf/algoritmos_para_grafos/aulas/bfs.html
-3. https://www.esalq.usp.br/lepse/imgs/conteudo_thumb/Aut-matos-Celulares.pdf
-4. https://pt.stackoverflow.com/questions/328048/como-é-o-funcionamento-básico-do-algoritmo-a
-5. https://www.datacamp.com/pt/tutorial/a-star-algorithm
+3. https://pt.stackoverflow.com/questions/328048/como-é-o-funcionamento-básico-do-algoritmo-a
+4. https://www.datacamp.com/pt/tutorial/a-star-algorithm
 
 ---
 ## Autores e Contatos
