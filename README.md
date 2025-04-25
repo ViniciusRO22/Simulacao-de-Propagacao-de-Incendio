@@ -211,7 +211,7 @@ A classe `Animal` modela um agente autônomo que tenta sobreviver ao incêndio n
 #### Método Mover:
 ##### Verificação de Segunda Chance:
 
-[Animal.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Animal.hpp#L28-L41)
+[Animal.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Animal.cpp#L28-L41)
 
 | Componente          | Funcionalidade                                                | Resposta Esperada                                                       |
 |---------------------|---------------------------------------------------------------|--------------------------------------------------------------------------|
