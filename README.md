@@ -181,6 +181,7 @@ Iteração 7:
 ---
 
 ### 3. Classe `Animal.hpp`/`Animal.cpp`
+[Animal.cpp](#animalcpp)
 #### Visão Geral:
 A classe `Animal` modela um agente autônomo que tenta sobreviver ao incêndio na floresta. Suas principais responsabilidades incluem:  
 - **Movimentação inteligente** com base no estado da matriz.  
@@ -210,8 +211,7 @@ A classe `Animal` modela um agente autônomo que tenta sobreviver ao incêndio n
 
 #### Método Mover:
 ##### Verificação de Segunda Chance:
-[Clasee Animal](#C:\Users\Vinícius R.O\Documents\AEDS\Simulação de Propagação de Incêndios\src)
-```
+
 | Componente          | Funcionalidade                                                | Resposta Esperada                                                       |
 |---------------------|---------------------------------------------------------------|--------------------------------------------------------------------------|
 | Verificação de Fogo | Checa se o animal está em uma célula em chamas (`2`).         | Se sim, analisa as células adjacentes |
@@ -229,7 +229,7 @@ if (matriz[posX][posY] == 0 && iteracoesSeguras < 3) {
 | Área Segura            | Detecta se está em célula segura (`0`)              | Permanece imóvel por até 3 iterações para se manter seguro contra o fogo     |
 | atualizarSeguranca()   | Incrementa contadores de segurança                  | Aumenta `iteracoesSeguras` e `iteracoesSegurasTotais`               |
 
-#### Lógica de Prioridades de Movimentação:
+##### Lógica de Prioridades de Movimentação:
 ```cpp
 if (ni >= 0 && ni < nLinhas && nj >= 0 && nj < nColunas) 
 {
@@ -281,7 +281,7 @@ if (ni >= 0 && ni < nLinhas && nj >= 0 && nj < nColunas)
 | Atualização de posição        | Se a célula tiver prioridade maior que a atual, torna-se o novo destino (`novaX`, `novaY`)   | O animal se prepara para mover na direção mais promissora                         |
 | Break com prioridade máxima   | Interrompe o laço ao encontrar célula de água (prioridade 3)                                 | Otimiza a decisão de movimento, reduzindo o tempo de busca                        |
 
-####Tratamento da Movimentação e da Água
+##### Tratamento da Movimentação e da Água
 ```cpp
  if ((novaX != posX || novaY != posY) && melhorPrioridade > 0)
     {
@@ -323,7 +323,7 @@ if (ni >= 0 && ni < nLinhas && nj >= 0 && nj < nColunas)
 | registrarPasso()         | Registra um novo movimento                                                     | Incrementa o contador de passos                                                    |
 | Verificação de água      | Se a célula destino era água (`prioridade == 3`), executa ações especiais      | Aumenta `aguaEncontrada` , altera célula atual de água (4) para segura (0) e converte células adjacentes em árvores saudáveis (valor 1) |
 
-#### Controle de Inatividade:
+##### Controle de Inatividade:
 ```cpp
  if (!(matriz[posX][posY] == 0 && iteracoesSeguras < 3))
         {
@@ -342,7 +342,7 @@ if (ni >= 0 && ni < nLinhas && nj >= 0 && nj < nColunas)
 | Verificação de Rodadas Sem Mover    | Conta iterações consecutivas sem movimento caso o animal não esteja efetuando iterações seguras em uma célula 0   | Após 2 rodadas imóvel, o animal morre (vivo = false) |
 
 
-#### Método de Acesso e Registro:
+#### Métodos de Acesso e Registro:
 
 ##### `registrarPasso(), getPassos()`:
 
