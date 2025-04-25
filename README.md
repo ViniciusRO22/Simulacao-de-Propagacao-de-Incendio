@@ -210,32 +210,7 @@ A classe `Animal` modela um agente autônomo que tenta sobreviver ao incêndio n
 
 #### Método Mover:
 ##### Verificação de Segunda Chance:
-```cpp
-if (matriz[posX][posY] == 2) 
-{
-    bool cercado = true;
-
-    for (const auto &d : direcoes)
-    {
-        int ni = posX + d.first;
-        int nj = posY + d.second;
-        
-        if (ni >= 0 && ni < nLinhas && nj >= 0 && nj < nColunas)
-        {
-            if (matriz[ni][nj] != 2)
-            {
-                cercado = false;
-                break;
-            }
-        }
-    }
-    
-    if (cercado)
-    {
-        vivo = false;
-        return;
-    }
-}
+[Clasee Animal](#C:\Users\Vinícius R.O\Documents\AEDS\Simulação de Propagação de Incêndios\src)
 ```
 | Componente          | Funcionalidade                                                | Resposta Esperada                                                       |
 |---------------------|---------------------------------------------------------------|--------------------------------------------------------------------------|
