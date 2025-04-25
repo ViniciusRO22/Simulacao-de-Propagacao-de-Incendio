@@ -218,7 +218,7 @@ A classe `Animal` modela um agente autônomo que tenta sobreviver ao incêndio n
 | Verificação de Fogo | Checa se o animal está em uma célula em chamas (`2`).         | Se sim, analisa as células adjacentes |
 | Loop de Direções    | Analisa células adjacentes.                                   | Se cercado por fogo em todas as direções, o animal morre (`vivo = false`). Caso não esteja cercado, encerra a verificação e permite q o código responsavel pela movimentação do animal atue                 |
 
-#### Atualização de Segurança:
+##### Atualização de Segurança:
 
 [Animal.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Animal.cpp#L50-L55)
 
