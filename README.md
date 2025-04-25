@@ -84,7 +84,7 @@ Define configurações globais para a simulação. Pode ser ajustado de acordo c
 #### Funcionalidades:
 - **Carregar Mapa**: Lê o arquivo `input.dat` e inicializa a matriz da floresta. [Arquivo.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Arquivo.cpp#L8-L54)
 - **Salvar Mapa**: Gera o arquivo `output.dat` com o estado da floresta a cada iteração. [Arquivo.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Arquivo.cpp#L56-L79)
-- **Salvar Resultados**: Registra métricas finais (sobrevivência, passos do animal, iterações necessárias para encerrar a simulação, caminho percorrido pelo animal, número de águas encontradas e número de iterações seguras feitas pelo animal).[Arquivo.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Arquivo.cpp#L68-L88)
+- **Salvar Resultados**: Registra métricas finais (sobrevivência, passos do animal, iterações necessárias para encerrar a simulação, caminho percorrido pelo animal, número de águas encontradas e número de iterações seguras feitas pelo animal).[Arquivo.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Arquivo.cpp#L81-L101)
 - `OBS`: o animal se move primeiro que a propagação de fogo, então a posição do animal em respectiva iteração representa a escolha de movimentação feita antes da propagação de fogo, mas na matriz impressa após a iteração completa a propagação de fogo já foi efetuada.
 
 #### Formato do `input.dat`:
