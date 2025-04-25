@@ -2,9 +2,12 @@
 #include <fstream>
 #include <iostream>
 
+const std::string Arquivo::DIR_ENTRADAS = "dataset/Entradas/";
+const std::string Arquivo::DIR_SAIDAS   = "dataset/Saidas/";
+
 std::pair<int, int> Arquivo::obterDimensao(const std::string &nomeArquivo) 
 {
-    std::ifstream entrada(nomeArquivo);
+    std::ifstream entrada(DIR_ENTRADAS + nomeArquivo);
     
     if (!entrada.is_open()) 
     {
@@ -21,7 +24,7 @@ std::pair<int, int> Arquivo::obterDimensao(const std::string &nomeArquivo)
 
 bool Arquivo::carregarMapa(const std::string &nomeArquivo, Floresta &floresta) 
 {
-    std::ifstream entrada(nomeArquivo);
+    std::ifstream entrada(DIR_ENTRADAS + nomeArquivo);
     
     if (!entrada.is_open()) 
     {
@@ -52,7 +55,7 @@ bool Arquivo::carregarMapa(const std::string &nomeArquivo, Floresta &floresta)
 
 void Arquivo::salvarMapa(const std::string &nomeArquivo, const Floresta &floresta, int iteracao) 
 {
-    std::ofstream saida(nomeArquivo, std::ios::app);
+    std::ofstream saida(DIR_SAIDAS + nomeArquivo, std::ios::app);
     
     if (!saida.is_open()) 
     {
@@ -79,7 +82,7 @@ void Arquivo::salvarResultados(const std::string &nomeArquivo, const Floresta &f
 {
     (void)floresta; 
 
-    std::ofstream saida(nomeArquivo, std::ios::app);
+    std::ofstream saida(DIR_SAIDAS + nomeArquivo, std::ios::app);
     
     if (!saida.is_open()) 
     {

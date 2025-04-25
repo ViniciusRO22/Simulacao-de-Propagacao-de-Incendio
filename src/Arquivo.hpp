@@ -14,6 +14,10 @@ class Arquivo
         static void salvarMapa(const std::string &nomeArquivo, const Floresta &floresta, int iteracao);
 
         static void salvarResultados(const std::string &nomeArquivo, const Floresta &floresta, int iteracoes, int passos, int aguaEncontrada, int iteracoesSegurasTotais, const std::string &caminho, bool sobreviveu);
+
+    private:
+        static const std::string DIR_ENTRADAS;
+        static const std::string DIR_SAIDAS;
 };
 
 #endif

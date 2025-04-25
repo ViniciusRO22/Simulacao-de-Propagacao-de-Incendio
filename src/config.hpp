@@ -18,6 +18,6 @@ enum Direcao
     DIREITA
 };
 
-const std::vector<Direcao> direcoesVento = { BAIXO , DIREITA }; // Caso o vento esteja ativo, é preciso configurar as direções específicas para a propagação.
+const std::vector<Direcao> direcoesVento = { DIREITA , BAIXO }; // Caso o vento esteja ativo, é preciso configurar as direções específicas para a propagação.
 
 #endif

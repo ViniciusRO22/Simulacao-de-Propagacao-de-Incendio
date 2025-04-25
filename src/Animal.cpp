@@ -8,7 +8,6 @@ bool Animal::estaVivo() const
     return vivo;
 }
 
-
 void Animal::mover(std::vector<std::vector<int>> &matriz) 
 {
     if (!vivo) return;
