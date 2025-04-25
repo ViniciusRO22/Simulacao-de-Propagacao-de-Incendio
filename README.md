@@ -82,9 +82,9 @@ Define configurações globais para a simulação. Pode ser ajustado de acordo c
 
 ### 2. Classe `Arquivo.hpp`/`Arquivo.cpp`
 #### Funcionalidades:
-- **Carregar Mapa**: Lê o arquivo `input.dat` e inicializa a matriz da floresta.
-- **Salvar Mapa**: Gera o arquivo `output.dat` com o estado da floresta a cada iteração.
-- **Salvar Resultados**: Registra métricas finais (sobrevivência, passos do animal, iterações necessárias para encerrar a simulação, caminho percorrido pelo animal, número de águas encontradas e número de iterações seguras feitas pelo animal).
+- **Carregar Mapa**: Lê o arquivo `input.dat` e inicializa a matriz da floresta. [Arquivo.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Arquivo.cpp#L8-L54)
+- **Salvar Mapa**: Gera o arquivo `output.dat` com o estado da floresta a cada iteração. [Arquivo.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Arquivo.cpp#L56-L79)
+- **Salvar Resultados**: Registra métricas finais (sobrevivência, passos do animal, iterações necessárias para encerrar a simulação, caminho percorrido pelo animal, número de águas encontradas e número de iterações seguras feitas pelo animal).[Arquivo.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Arquivo.cpp#L68-L88)
 - `OBS`: o animal se move primeiro que a propagação de fogo, então a posição do animal em respectiva iteração representa a escolha de movimentação feita antes da propagação de fogo, mas na matriz impressa após a iteração completa a propagação de fogo já foi efetuada.
 
 #### Formato do `input.dat`:
@@ -211,7 +211,7 @@ A classe `Animal` modela um agente autônomo que tenta sobreviver ao incêndio n
 #### Método Mover:
 ##### Verificação de Segunda Chance:
 
-[Animal.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Animal.cpp#L28-L41)
+[Animal.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Animal.cpp#L20-L48)
 
 | Componente          | Funcionalidade                                                | Resposta Esperada                                                       |
 |---------------------|---------------------------------------------------------------|--------------------------------------------------------------------------|
@@ -219,57 +219,18 @@ A classe `Animal` modela um agente autônomo que tenta sobreviver ao incêndio n
 | Loop de Direções    | Analisa células adjacentes.                                   | Se cercado por fogo em todas as direções, o animal morre (`vivo = false`). Caso não esteja cercado, encerra a verificação e permite q o código responsavel pela movimentação do animal atue                 |
 
 #### Atualização de Segurança:
-```cpp
-if (matriz[posX][posY] == 0 && iteracoesSeguras < 3) {
-    atualizarSeguranca();
-    return;
-}
-```
+
+[Animal.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Animal.cpp#L50-L55)
+
 | Componente             | Funcionalidade                                      | Resposta Esperada                                                   |
 |------------------------|-----------------------------------------------------|----------------------------------------------------------------------|
 | Área Segura            | Detecta se está em célula segura (`0`)              | Permanece imóvel por até 3 iterações para se manter seguro contra o fogo     |
 | atualizarSeguranca()   | Incrementa contadores de segurança                  | Aumenta `iteracoesSeguras` e `iteracoesSegurasTotais`               |
 
 ##### Lógica de Prioridades de Movimentação:
-```cpp
-if (ni >= 0 && ni < nLinhas && nj >= 0 && nj < nColunas) 
-{
-    if (ni == ultimaPosX && nj == ultimaPosY && matriz[posX][posY] != 2) 
-    {
-        continue;
-    }
 
-    int valorCelula = matriz[ni][nj];
-    int prioridadeCelula = 0;
+[Animal.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Animal.cpp#L57-L105)
 
-    if (valorCelula == 4)
-    {
-        prioridadeCelula = 3;
-    }
-    else if (valorCelula == 0 || valorCelula == 1)
-    {
-        prioridadeCelula = 2;
-    }
-    else if (valorCelula == 3)
-    {
-        prioridadeCelula = 1;
-    }
-
-    if (prioridadeCelula == 3) 
-    {
-        novaX = ni;
-        novaY = nj;
-        melhorPrioridade = 3;
-        break;
-    } 
-    else if (prioridadeCelula > melhorPrioridade) 
-    {
-        novaX = ni;
-        novaY = nj;
-        melhorPrioridade = prioridadeCelula;
-    }
-}
-```
 | Componente                    | Funcionalidade                                                                                   | Resposta Esperada                                                         |
 |-------------------------------|----------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
 | Limites da matriz             | Garante que `ni` e `nj` estejam dentro dos limites da matriz                                 | Evita acessar posições inválidas (segfaults)                                      |
@@ -283,39 +244,9 @@ if (ni >= 0 && ni < nLinhas && nj >= 0 && nj < nColunas)
 | Break com prioridade máxima   | Interrompe o laço ao encontrar célula de água (prioridade 3)                                 | Otimiza a decisão de movimento, reduzindo o tempo de busca                        |
 
 ##### Tratamento da Movimentação e da Água
-```cpp
- if ((novaX != posX || novaY != posY) && melhorPrioridade > 0)
-    {
-        ultimaPosX = posX;
-        ultimaPosY = posY;
-        
-        posX = novaX;
-        posY = novaY;
 
-        rodadasSemMover = 0; 
+[Animal.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Animal.cpp#L121-L151)
 
-        iteracoesSeguras = 0; 
-        
-        registrarPasso();
-
-        if (melhorPrioridade == 3) 
-        {
-            encontrouAgua();
-
-            matriz[posX][posY] = 0;
-
-            for (auto d : direcoes) 
-            {
-                int adjX = posX + d.first;
-                int adjY = posY + d.second;
-                if (adjX >= 0 && adjX < nLinhas && adjY >= 0 && adjY < nColunas)
-                {
-                    matriz[adjX][adjY] = 1;
-                }
-            }
-        }
-    }
-```
 | Componente                | Funcionalidade                                                                 | Resultado Esperado                                                                 |
 |--------------------------|--------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
 | Verificação de movimento | Garante que o animal só se mova se a nova posição for diferente da atual       | Evita contagem de movimento quando o animal não muda de posição                    |
@@ -325,25 +256,17 @@ if (ni >= 0 && ni < nLinhas && nj >= 0 && nj < nColunas)
 | Verificação de água      | Se a célula destino era água (`prioridade == 3`), executa ações especiais      | Aumenta `aguaEncontrada` , altera célula atual de água (4) para segura (0) e converte células adjacentes em árvores saudáveis (valor 1) |
 
 ##### Controle de Inatividade:
-```cpp
- if (!(matriz[posX][posY] == 0 && iteracoesSeguras < 3))
-        {
-            rodadasSemMover++; 
 
-            if (rodadasSemMover >= limiteRodadasSemMover)
-            {
-                vivo = false;
-               
-                return;
-            }
-        }
-```
+[Animal.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Animal.cpp#L154-L164)
+
 | Componente         | Funcionalidade                                 | Resposta Esperada                               |
 |--------------------|-----------------------------------------------|--------------------------------------------------|
 | Verificação de Rodadas Sem Mover    | Conta iterações consecutivas sem movimento caso o animal não esteja efetuando iterações seguras em uma célula 0   | Após 2 rodadas imóvel, o animal morre (vivo = false) |
 
 
 #### Métodos de Acesso e Registro:
+
+[Animal.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Animal.cpp#L173-L212)
 
 ##### `registrarPasso(), getPassos()`:
 
@@ -392,22 +315,9 @@ A classe `Floresta` modela a dinâmica do ambiente e a propagação do incêndio
 | fireGen                  | Vetor vazio          | Registro temporal do surgimento do fogo em cada célula       |
 
 #### Método Exibir:
-```cpp
-  for (int i = 0; i < nLinhas; i++) 
-    {
-        for (int j = 0; j < nColunas; j++) 
-        {
-            std::cout << matriz[i][j] << " ";
-        }
-        
-        std::cout << "\n";
-    }
 
-    std::cout << "\n";
-    
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-}
-```
+[Floresta.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Floresta.cpp#L13-L28)
+
 | Componente                     | Funcionalidade                                                                 | Resposta Esperada                                                                 |
 |--------------------------------|-------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
 | Loop pelas linhas              | `for (int i = 0; i < nLinhas; i++)`                                           | Percorre todas as linhas da matriz, começando do topo (linha 0) até o fundo.      |
@@ -424,17 +334,9 @@ A classe `Floresta` modela a dinâmica do ambiente e a propagação do incêndio
 
 #### Método AtualizarFogo:
 ##### Inicialização do FireGen:
-```cpp
- static int iter = 0;
-    ++iter;
 
-    std::vector<std::vector<int>> novaMatriz = matriz;
+[Floresta.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Floresta.cpp#L32-L40)
 
-    if (fireGen.empty()) 
-    {
-        fireGen.resize(nLinhas, std::vector<int>(nColunas, -1));
-    }
-```
 | Componente       | Funcionalidade                                                 | Resposta Esperada                                                            |
 |------------------|----------------------------------------------------------------|----------------------------------------------------------------------------- |
 | `static int iter`| Mantém contagem global de iterações entre chamadas do método   | Incrementado a cada atualização (ex: iter = 1, 2, 3, …)                      |
@@ -444,55 +346,9 @@ A classe `Floresta` modela a dinâmica do ambiente e a propagação do incêndio
 | Valor -1         | Valor padrão em `fireGen` indicando que nunca queimou          | Serve como marcador para células não afetadas pelo fogo até o momento atual  |
 
 ##### Propagação do Fogo:
-```cpp
- for (int i = 0; i < nLinhas; i++) 
-    {
-        for (int j = 0; j < nColunas; j++) 
-        {
-            if (matriz[i][j] == 1) 
-            { 
-                bool vizinhoEmFogo = false;
-                std::vector<std::pair<int, int>> direcoes;
 
-                if (VENTO_ATIVO) 
-                {
-                    for (auto dir : direcoesVento) 
-                    {
-                        switch (dir) 
-                        {
-                            case CIMA:    direcoes.push_back({1, 0}); break;
-                            case BAIXO:   direcoes.push_back({-1, 0});  break;
-                            case ESQUERDA:direcoes.push_back({0, 1});  break;
-                            case DIREITA: direcoes.push_back({0, -1});  break;
-                        }
-                    }
-                }
-                else 
-                {
-                    direcoes = {{-1,0},{1,0},{0,-1},{0,1}};
-                }
+[Floresta.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Floresta.cpp#L42-L88)
 
-                for (auto &d : direcoes) 
-                {
-                    int ni = i + d.first, nj = j + d.second;
-                   
-                    if (posicaoValida(ni,nj) && matriz[ni][nj] == 2) 
-                    {
-                        vizinhoEmFogo = true;
-                        
-                        break;
-                    }
-                }
-
-                if (vizinhoEmFogo) 
-                {
-                    novaMatriz[i][j] = 2;
-                    fireGen[i][j] = iter; 
-                }
-            }
-        }
-    }
-```
 | Componente            | Funcionalidade                                                 | Resposta Esperada                                                           |
 |-----------------------|----------------------------------------------------------------|-----------------------------------------------------------------------------|
 | **Loop Principal**    | Itera por todas as células da matriz (`i` = linha, `j` = coluna)| Processa cada célula individualmente                                            |
@@ -513,18 +369,9 @@ A classe `Floresta` modela a dinâmica do ambiente e a propagação do incêndio
 | **DIREITA**         | `(0, -1)`           | Propaga para esquerda              |
 
 ##### Queima de Árvore:
-```cpp
-for (int i = 0; i < nLinhas; i++) 
-    {
-        for (int j = 0; j < nColunas; j++) 
-        {
-            if (matriz[i][j] == 2 && fireGen[i][j] <= iter - 2) 
-            {
-                novaMatriz[i][j] = 3;
-            }
-        }
-    }
-```
+
+[Floresta.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Floresta.cpp#L90-L99)
+
 | Componente               | Funcionalidade                                                                 | Resposta Esperada                                                                 |
 |--------------------------|-------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
 | `matriz[i][j] == 2`      | Verifica se a célula está em chamas no estado atual.                          | Identifica células que estão queimando no momento, garantindo que apenas essas sejam candidatas a virar cinzas. |
@@ -535,24 +382,9 @@ for (int i = 0; i < nLinhas; i++)
 
 
 #### Método Toda Queimada: 
-```cpp
-bool Floresta::todaQueimada() const 
-{
-    for (const auto &linha : matriz) 
-    {
-        for (int valor : linha) 
-        {
-         
-            if (valor == 2) 
-            {
-                return false;
-            }
-        }
-    }
-   
-    return true;
-}
-```
+
+[Floresta.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Floresta.cpp#L123-L138)
+
 | Componente            | Funcionalidade                                                            | Resposta Esperada                                                         |
 |-----------------------|---------------------------------------------------------------------------|---------------------------------------------------------------------------|
 | Loop for por linhas   | Percorre cada linha da matriz (`linha : matriz`)                          | Garante verificação completa de toda a floresta                            |
@@ -584,38 +416,9 @@ A classe Simulacao orquestra todo o processo de simulação. Principais responsa
 
 #### Método Executar:
 ##### Fluxo Principal:
-```cpp
-int iteracoes = 0;
-    std::ostringstream caminho; 
 
-    while (iteracoes < ITERACOES_MAX) 
-    {
-        iteracoes++;
-   
-        animal->mover(floresta->getMatriz());
-        
-        if (!animal->estaVivo())
-        {
-            std::cout << "O animal morreu na iteracao " << iteracoes << "!\n";
-            break;
-        }
-        
-        floresta->atualizarFogo();
-        
-        Arquivo::salvarMapa(arquivoSaida, *floresta, iteracoes);
-        
-        floresta->exibir();
-        
-        caminho << "(" << animal->getPosX() << "," << animal->getPosY() << ")[iteração " << iteracoes << "] ";
-        
-        if (floresta->todaQueimada()) 
-        {
-            std::cout << "A floresta está completamente queimada ou o fogo se extinguiu. Encerrando simulação." << std::endl;
-            
-            break;
-        }
-    }
-```
+[Simulação.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Simulacao.cpp#L75-L101)
+
 | Componente               | Frequência     | Funcionalidade                                              |
 |--------------------------|----------------|-------------------------------------------------------------|
 | Movimento do animal      | Por iteração   | Atualiza posição com base na lógica de prioridades          |
@@ -632,6 +435,8 @@ int iteracoes = 0;
 #### Métodos Suporte:
 ##### Inicializar
 
+[Simulação.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Simulacao.cpp#L9-L61)
+
 | Etapa              | Funcionalidade                                         | Critério de Sucesso                      |
 |--------------------|--------------------------------------------------------|------------------------------------------|
 | Carregar dimensões | Valida contra `MIN_LINHAS` / `MIN_COLUNAS`            | Dimensões >= 100x100                     |
@@ -639,6 +444,8 @@ int iteracoes = 0;
 | Posicionar animal  | Encontra primeira célula segura (valor 0)             | Pelo menos uma célula segura disponível  |
 
 ##### Limpar
+
+[Simulação.cpp](https://github.com/ViniciusRO22/Simulacao-de-Propagacao-de-Incendio/blob/main/src/Simulacao.cpp#L113-L126)
 
 | Recurso   | Ação     | Motivo                                          |
 |-----------|----------|-------------------------------------------------|
